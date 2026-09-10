@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-dark: var(--brand-green-dark);
+  --color-brand-mist: var(--brand-mist);
+  --color-fundo: var(--fundo);
+  --color-grafite: var(--grafite);
+  --color-texto-suave: var(--texto-suave);
+  --color-texto-suave-2: var(--texto-suave-2);
+  --color-borda-clara: var(--borda-clara);
+  --color-borda-clara-2: var(--borda-clara-2);
+  --color-verde: var(--verde);
+  --color-verde-claro: var(--verde-claro);
+  --color-verde-escuro: var(--verde-escuro);
+  --color-verde-escuro-2: var(--verde-escuro-2);
+  --font-sans: var(--font-ibm-plex-sans);
+  --font-heading: var(--font-archivo);
+  --font-titulo: var(--font-archivo);
+  --font-corpo: var(--font-ibm-plex-sans);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+}
+
+:root {
+  --font-archivo: 'Archivo';
+  --font-ibm-plex-sans: 'IBM Plex Sans';
+  --fundo: #f4f5f3;
+  --grafite: #363435;
+  --texto-suave: #5c5f5a;
+  --texto-suave-2: #6e716c;
+  --borda-clara: #dadcd7;
+  --borda-clara-2: #cfd2cc;
+  --verde: #008100;
+  --verde-claro: #0bb40b;
+  --verde-escuro: #0c2e2b;
+  --verde-escuro-2: #0a2523;
+  --gradiente-marca: linear-gradient(100deg, #0c2e2bf5 0%, #0c2e2be6 44%, #0c2e2bbd 100%);
+  --background: #f4f5f3;
+  --foreground: #363435;
+  --card: #ffffff;
+  --card-foreground: #102b2a;
+  --muted: #edf3ef;
+  --muted-foreground: #5c706f;
+  --border: #dadcd7;
+  --ring: #008100;
+  --brand-deep: #0c2e2b;
+  --brand-green: #008100;
+  --brand-green-dark: #0bb40b;
+  --brand-mist: #f4f5f3;
+}
+
+.bg-gradiente-marca { background: var(--gradiente-marca); }
+.container-spin { animation: mmgirar 26s linear infinite; }
+.animar-surgir { animation: .32s both mmsurgir; }
+
+@keyframes mmgirar {
+  0% { transform: rotateX(-18deg) rotateY(0); }
+  100% { transform: rotateX(-18deg) rotateY(360deg); }
+}
+
+@keyframes mmsurgir {
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .container-spin, .animar-surgir { animation: none !important; }
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}
+
+.dark {
+  --background: #062f2e;
+  --foreground: #f3fff5;
+  --card: #0a4543;
+  --card-foreground: #f3fff5;
+  --muted: #103f3d;
+  --muted-foreground: #abc2be;
+  --border: rgba(255, 255, 255, 0.13);
+  --ring: #00d118;
+  --brand-deep: #052b2a;
+  --brand-green: #00d118;
+  --brand-green-dark: #55ef65;
+  --brand-mist: #0d4542;
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { @apply scroll-smooth; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-ibm-plex-sans), system-ui, sans-serif;
+  }
+  button, input, textarea, select {
+    font-family: var(--font-ibm-plex-sans), system-ui, sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-archivo), system-ui, sans-serif;
+  }
+  button, a { @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green; }
+}
+
+.grid-lines {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.085) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.085) 1px, transparent 1px);
+  background-size: 118px 118px;
+  mask-image: linear-gradient(to bottom, black, transparent 92%);
+}
+
+.hero-port {
+  background-image: url('/itajai-terminais.webp');
+  background-position: center 48%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

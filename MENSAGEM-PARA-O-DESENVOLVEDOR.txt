@@ -1,0 +1,7 @@
+Olá! Este pacote contém uma implementação de referência para adicionar a aba Feedback aos acompanhamentos do MM Team Control.
+
+Fluxo: abrir o acompanhamento > gerar um link > cliente responde na página MM Softwares personalizada com a empresa > respostas aparecem na aba Feedback do mesmo acompanhamento.
+
+O ZIP inclui painel de teste, componente React reutilizável, página de formulário adaptada, APIs, esquema SQL e testes. Comece pelo README.md e siga INTEGRACAO.md para conectar o módulo ao banco e à autenticação do sistema atual.
+
+O projeto é executável localmente, mas não é um patch do repositório original: precisamos adaptar a tabela de acompanhamentos, as rotas e as permissões ao backend existente. Nenhuma credencial ou dado real está incluído. O modo de produção nega as APIs internas até a autorização ser integrada.

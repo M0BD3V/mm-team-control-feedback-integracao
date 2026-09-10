@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+const base = process.env.TEST_BASE_URL || 'http://127.0.0.1:3100';
+async function call(path, body, extra = {}) { const r = await fetch(base + path, body === undefined ? extra : { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body), ...extra }); const text = await r.text(); let data; try { data=JSON.parse(text); } catch { data={ message:text }; } return { status:r.status, data }; }
+const list = await call('/api/acompanhamentos'); assert.equal(list.status,200); assert.ok(list.data.length >= 2);
+const [a,b] = list.data;
+const before = await call(`/api/acompanhamentos/${b.id}/feedback`);
+const link = await call(`/api/acompanhamentos/${a.id}/feedback`,{}); assert.equal(link.status,200);
+const token = new URL(link.data.url).searchParams.get('token'); assert.equal(token.length,43);
+const invite = await call('/api/convite?token='+token); assert.equal(invite.data.company,a.company); assert.equal(invite.data.answered,false); assert.equal(invite.data.answers,undefined);
+assert.equal((await call('/api/convite?token=invalid')).status,404);
+assert.equal((await call('/api/feedback',{ token, name:'',feedbackType:'treinamento' })).status,400);
+assert.equal((await call('/api/feedback',{ token, name:'Teste automatizado',feedbackType:'produtos', productExperience:'Boa experiência', rating:'6' })).status,400);
+const payload = { token, name:'Cliente de teste', company:'Empresa adulterada', feedbackType:'treinamento', initialExperience:'Treinamento claro e objetivo.', trainingExpectations:'Sim, a equipe está acompanhando.', difficulties:'', improvements:'Mais exemplos práticos.', experienceWord:'Ótima', teamMessage:'Obrigado!' };
+const results = await Promise.all([call('/api/feedback',payload),call('/api/feedback',payload)]);
+assert.deepEqual(results.map(r=>r.status).sort(),[200,409]);
+const responses = await call(`/api/acompanhamentos/${a.id}/feedback`); assert.ok(responses.data.some(r=>r.answers.initialExperience===payload.initialExperience));
+const other = await call(`/api/acompanhamentos/${b.id}/feedback`); assert.equal(other.data.length,before.data.length);
+assert.equal((await call('/api/convite?token='+token)).data.answered,true);
+const productLink = await call(`/api/acompanhamentos/${b.id}/feedback`,{}); const productToken = new URL(productLink.data.url).searchParams.get('token');
+assert.equal((await call('/api/feedback',{token:productToken,name:'Teste produtos',feedbackType:'produtos',productExperience:'WMS funcionando bem.',rating:'5'})).status,200);
+assert.equal((await call(`/api/acompanhamentos/${b.id}/feedback`,{}, { method:'POST', headers:{Origin:'https://example.invalid'} })).status,403);
+assert.equal((await call('/api/acompanhamentos/inexistente/feedback')).status,404);
+assert.equal((await call('/api/feedback',{token,name:'a'.repeat(41000)})).status,413);
+console.log('PASS: links, personalização, validação, treinamento, produtos, concorrência, duplicidade, isolamento, origem e limite de corpo. Respostas fictícias foram gravadas no banco de teste.');
